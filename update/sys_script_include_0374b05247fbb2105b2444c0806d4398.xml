@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_58872_needit.SLAComplianceManager</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <mobile_callable>false</mobile_callable>
+        <name>SLAComplianceManager</name>
+        <sandbox_callable>false</sandbox_callable>
+        <script><![CDATA[var SLAComplianceManager = Class.create();
+SLAComplianceManager.prototype = {
+    initialize: function() {
+    },
+	getBreachedHighPriorityTasks: function(groupId) {
+
+        var breachedTasks = [];
+
+        if (!groupId) {
+			return breachedTasks;
+        }
+
+
+        var tasks = new GlideRecord('task');
+        tasks.addQuery('sys_class_name', 'IN', 'incident,sc_task'); 
+        tasks.addQuery('assignment_group.name', groupId);
+        tasks.addQuery('active', true);
+        tasks.addQuery('priority', 'IN', '1,2'); 
+
+        tasks.addQuery('due_date', '<', new GlideDateTime()); 
+        tasks.query();
+
+        while (tasks.next()) {
+            
+            var dueGdt = new GlideDateTime(tasks.getValue('due_date'));
+            var nowGdt = new GlideDateTime();
+            
+            var duration = GlideDateTime.subtract(dueGdt, nowGdt); 
+            
+            var breachedString = duration.getDisplayValue() + " ago"; 
+
+            breachedTasks.push({
+                number: tasks.getValue('number'),
+                short_description: tasks.getValue('short_description'),
+                breached_by: breachedString
+            });
+        }
+
+        return breachedTasks;
+    },
+    type: 'SLAComplianceManager'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-03-25 06:32:46</sys_created_on>
+        <sys_id>0374b05247fbb2105b2444c0806d4398</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>SLAComplianceManager</sys_name>
+        <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
+        <sys_update_name>sys_script_include_0374b05247fbb2105b2444c0806d4398</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-03-25 06:32:46</sys_updated_on>
+    </sys_script_include>
+    <sys_es_latest_script action="INSERT_OR_UPDATE">
+        <id>0374b05247fbb2105b2444c0806d4398</id>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-03-25 06:32:45</sys_created_on>
+        <sys_id>369438d247fbb2105b2444c0806d4384</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-03-25 06:32:45</sys_updated_on>
+        <table>sys_script_include</table>
+        <use_es_latest>true</use_es_latest>
+    </sys_es_latest_script>
+</record_update>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element attributes="email_client=true,hasWorkflow=true,live_feed=true" audit="true" db_object_id="6103d6789d16321055903da570aff0e7" extends="task" label="Change Request" max_length="40" name="change_request" text_index="true" type="collection">
+        <element label="Source Problem" max_length="32" name="x_58872_needit_source_problem" reference="problem" type="reference"/>
+    </element>
+</database>
